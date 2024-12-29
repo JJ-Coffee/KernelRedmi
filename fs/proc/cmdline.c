@@ -6,7 +6,6 @@
 #include <linux/slab.h>
 #include <asm/setup.h>
 
-
 #ifdef CONFIG_PROC_BEGONIA_CMDLINE
 static char patched_cmdline[COMMAND_LINE_SIZE];
 #endif
@@ -14,6 +13,7 @@ static char patched_cmdline[COMMAND_LINE_SIZE];
 #ifdef KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG
 extern int susfs_spoof_cmdline_or_bootconfig(struct seq_file *m);
 #endif
+
 
 static int cmdline_proc_show(struct seq_file *m, void *v)
 {
