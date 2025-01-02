@@ -14,7 +14,6 @@ static char patched_cmdline[COMMAND_LINE_SIZE];
 extern int susfs_spoof_cmdline_or_bootconfig(struct seq_file *m);
 #endif
 
-
 static int cmdline_proc_show(struct seq_file *m, void *v)
 {
 #ifdef KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG
