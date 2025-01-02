@@ -80,3 +80,6 @@ else
 default:
 	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules
 endif
+
+obj-$(CONFIG_MTK_WCN_STP) += gps/stp_chrdev_gps.o bt/stp_chrdev_bt.o gps/fw_log_gps.o bt/fw_log_bt.o
+obj-$(CONFIG_MTK_WMT) += fmradio/plat/legacy_wmt.o
