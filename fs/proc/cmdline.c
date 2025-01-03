@@ -74,6 +74,13 @@ static void patch_begonia_cmdline(char *cmdline)
 {
 	if(!check_flag(cmdline, "androidboot.hwc=", "GL"))
 		append_cmdline(cmdline, "androidboot.product.hardware.sku=begonia");
+	        append_cmdline(cmdline, "console=tty0");
+                append_cmdline(cmdline, "console=ttyMT3,921600n1");
+                append_cmdline(cmdline, "root=/dev/ram");
+                append_cmdline(cmdline, "vmalloc=496M");
+                append_cmdline(cmdline, "slub_max_order=0");
+                append_cmdline(cmdline, "slub_debug=0");
+	        
 }
 #endif
 
