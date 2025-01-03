@@ -71,7 +71,7 @@ bat_gm30: battery{
 /*	compensate R_sense resistance*/
 	enable_tmp_intr_suspend = <(0)>;
 /* Enable update temp when suspend */
-	MULTI_BATTERY = <(0)>;
+	MULTI_BATTERY = <(1)>;
 	ACTIVE_TABLE = <(0)>;
 /* Table numbers per battery*/
 	MULTI_TEMP_GAUGE0 = <(1)>;
