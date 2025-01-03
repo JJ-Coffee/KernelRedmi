@@ -44,40 +44,61 @@ static const struct file_operations cmdline_proc_fops = {
 
 #ifdef CONFIG_PROC_BEGONIA_CMDLINE
 static void append_cmdline(char *cmd, const char *flag_val) {
-	strncat(cmd, " ", 2);
-	strncat(cmd, flag_val, strlen(cmd) + 1);
+    if (strlen(cmd) + strlen(flag_val) + 1 < COMMAND_LINE_SIZE) {
+        strncat(cmd, " ", COMMAND_LINE_SIZE - strlen(cmd) - 1);
+        strncat(cmd, flag_val, COMMAND_LINE_SIZE - strlen(cmd) - 1);
+    }
 }
 
-static bool check_flag(char *cmd, const char *flag, const char *val)
-{
-	size_t f_len, r_len, v_len;
-	char *f_pos, *v_pos, *v_end;
-	char *r_val;
+static bool check_flag(char *cmd, const char *flag, const char *val) {
+    size_t f_len, v_len;
+    char *f_pos, *v_pos, *v_end;
+    bool ret = false;
 
-	f_pos = strstr(cmd, flag);
-	if (!f_pos) {
-		return false;
-	}
-	f_len = strlen(flag);
-	v_len = strlen(val);
-	v_pos = f_pos + f_len;
-	v_end = v_pos + strcspn(f_pos + f_len, " ");
-	r_len = v_end - v_pos;
-	if ((r_val = kmalloc(r_len + 1, GFP_KERNEL)) == NULL)
-		return false;
-	memcpy(r_val, v_pos, r_len + 1);
-	bool ret = r_len == v_len && !memcmp(r_val, val, r_len);
-	return ret;
+    f_pos = strstr(cmd, flag);
+    if (!f_pos) {
+        return false;
+    }
+
+    f_len = strlen(flag);
+    v_len = strlen(val);
+    v_pos = f_pos + f_len;
+    v_end = v_pos + strcspn(v_pos, " ");
+
+    if ((v_end - v_pos) == v_len && !memcmp(v_pos, val, v_len)) {
+        ret = true;
+    }
+
+    return ret;
+}
+
+static void replace_cmdline_param(char *cmdline, const char *key, const char *value) {
+    char *param_start = strstr(cmdline, key);
+
+    if (param_start) {
+        char *param_end = strchr(param_start, ' ');
+        if (param_end) {
+            // Remove existing parameter
+            memmove(param_start, param_end + 1, strlen(param_end));
+        } else {
+            // Null-terminate if it's the last parameter
+            *param_start = '\0';
+        }
+    }
+
+    // Append the new parameter
+    append_cmdline(cmdline, key);
+    append_cmdline(cmdline, value);
 }
 
 static void patch_begonia_cmdline(char *cmdline)
 {
-	if(!check_flag(cmdline, "console=", "ttyS0,921600n1"))
-                append_cmdline(cmdline, "console=ttyMT3,921600n1");
-	
-	if(!check_flag(cmdline, "vmalloc=", "400"))
-                append_cmdline(cmdline, "vmalloc=496M");
-	
+	if (!check_flag(cmdline, "console=", "ttyS0,921600n1")) {
+		replace_cmdline_param(cmdline, "console=", "ttyMT3,921600n1");
+	}
+	if (!check_flag(cmdline, "vmalloc=", "400")) {
+		replace_cmdline_param(cmdline, "vmalloc=", "496M");
+	}
         append_cmdline(cmdline, "slub_max_order=0");
         append_cmdline(cmdline, "slub_debug=0");
 }
