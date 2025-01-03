@@ -45,15 +45,21 @@ else
 	TIMESTAMP=$KBUILD_BUILD_TIMESTAMP
 fi
 if test -z "$KBUILD_BUILD_USER"; then
-	LINUX_COMPILE_BY="Saikrishna1504"
+	LINUX_COMPILE_BY="build-user"
 else
 	LINUX_COMPILE_BY=$KBUILD_BUILD_USER
 fi
 if test -z "$KBUILD_BUILD_HOST"; then
-	LINUX_COMPILE_HOST="Lab"
+	LINUX_COMPILE_HOST="build-host"
 else
 	LINUX_COMPILE_HOST=$KBUILD_BUILD_HOST
 fi
+if [ -n "$KBUILD_COMPILER_STRING" ]; then
+    echo \#define LINUX_COMPILER \"${KBUILD_COMPILER_STRING}\"
+else
+    echo \#define LINUX_COMPILER \"`$CC -v 2>&1 | grep ' version ' | sed 's/clang/Clang/g' | sed 's/(https..*)//g' | sed 's/[[:space:]]*$//'`\"
+fi
+
 
 UTS_VERSION="$(echo $UTS_VERSION $CONFIG_FLAGS $TIMESTAMP | cut -b -$UTS_LEN)"
 CONFIG_FLAGS=""
