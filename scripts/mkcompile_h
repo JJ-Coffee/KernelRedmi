@@ -54,11 +54,7 @@ if test -z "$KBUILD_BUILD_HOST"; then
 else
 	LINUX_COMPILE_HOST=$KBUILD_BUILD_HOST
 fi
-if [ -n "$KBUILD_COMPILER_STRING" ]; then
-    echo \#define LINUX_COMPILER \"${KBUILD_COMPILER_STRING}\"
-else
-    echo \#define LINUX_COMPILER \"`$CC -v 2>&1 | grep ' version ' | sed 's/clang/Clang/g' | sed 's/(https..*)//g' | sed 's/[[:space:]]*$//'`\"
-fi
+
 
 
 UTS_VERSION="$(echo $UTS_VERSION $CONFIG_FLAGS $TIMESTAMP | cut -b -$UTS_LEN)"
@@ -69,7 +65,7 @@ UTS_VERSION="$UTS_VERSION $CONFIG_FLAGS $TIMESTAMP"
 
 # Truncate to maximum length
 
-UTS_LEN=256
+UTS_LEN=64
 UTS_TRUNCATE="cut -b -$UTS_LEN"
 
 # Generate a temporary compile.h
@@ -84,7 +80,12 @@ UTS_TRUNCATE="cut -b -$UTS_LEN"
   echo \#define LINUX_COMPILE_BY \"`echo $LINUX_COMPILE_BY | $UTS_TRUNCATE`\"
   echo \#define LINUX_COMPILE_HOST \"`echo $LINUX_COMPILE_HOST | $UTS_TRUNCATE`\"
 
-  echo \#define LINUX_COMPILER \"${KBUILD_COMPILER_STRING}\"
+  if [ -n "$KBUILD_COMPILER_STRING" ]; then
+    echo \#define LINUX_COMPILER \"${KBUILD_COMPILER_STRING}\"
+  else
+    echo \#define LINUX_COMPILER \"`$CC -v 2>&1 | grep ' version ' | sed 's/clang/Clang/g' | sed 's/(https..*)//g' | sed 's/[[:space:]]*$//'`\"
+  fi
+) > .tmpcompile
 
 # Only replace the real compile.h if the new one is different,
 # in order to preserve the timestamp and avoid unnecessary
