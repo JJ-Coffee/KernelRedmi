@@ -45,12 +45,12 @@ else
 	TIMESTAMP=$KBUILD_BUILD_TIMESTAMP
 fi
 if test -z "$KBUILD_BUILD_USER"; then
-	LINUX_COMPILE_BY="JJCoffee"
+	LINUX_COMPILE_BY="build-user"
 else
 	LINUX_COMPILE_BY=$KBUILD_BUILD_USER
 fi
 if test -z "$KBUILD_BUILD_HOST"; then
-	LINUX_COMPILE_HOST="host"
+	LINUX_COMPILE_HOST="build-host"
 else
 	LINUX_COMPILE_HOST=$KBUILD_BUILD_HOST
 fi
@@ -69,7 +69,7 @@ UTS_VERSION="$UTS_VERSION $CONFIG_FLAGS $TIMESTAMP"
 
 # Truncate to maximum length
 
-UTS_LEN=64
+UTS_LEN=256
 UTS_TRUNCATE="cut -b -$UTS_LEN"
 
 # Generate a temporary compile.h
