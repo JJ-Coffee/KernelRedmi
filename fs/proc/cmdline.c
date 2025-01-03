@@ -72,7 +72,7 @@ static bool check_flag(char *cmd, const char *flag, const char *val)
 
 static void patch_begonia_cmdline(char *cmdline)
 {
-	if(!check_flag(cmdline, "androidboot.hwc=", "Global"))
+	if(!check_flag(cmdline, "androidboot.hwc=", "India"))
 		append_cmdline(cmdline, "androidboot.product.hardware.sku=begonia");
 }
 #endif
