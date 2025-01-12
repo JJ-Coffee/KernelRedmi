@@ -18,3 +18,20 @@ ccflags-y += -I$(srctree)/drivers/misc/mediatek/eccci/udc/udc_lib_inc
 else
 obj-  := dummy.o # avoid build error
 endif
+
+obj-m += udc_lib.o
+
+udc_lib-y += \
+    adler32.o \
+    crc32.o \
+    zutil.o \
+    deflate.o \
+    trees.o \
+    udc_lib_main.o
+
+ccflags-y += \
+    -DZ_SOLO
+
+ccflags-y += \
+	-I$(srctree)/drivers/misc/mediatek/eccci/udc \
+	-I$(srctree)/drivers/misc/mediatek/eccci/udc/udc_lib_inc
