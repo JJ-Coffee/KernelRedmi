@@ -3,13 +3,12 @@
 #include <linux/init.h>
 #include <linux/proc_fs.h>
 #include <linux/seq_file.h>
+#include <linux/slab.h>
+#include <asm/setup.h>
 
 #ifdef CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG
 extern int susfs_spoof_cmdline_or_bootconfig(struct seq_file *m);
 #endif
-
-#include <linux/slab.h>
-#include <asm/setup.h>
 
 #ifdef CONFIG_PROC_BEGONIA_CMDLINE
 static char patched_cmdline[COMMAND_LINE_SIZE];
