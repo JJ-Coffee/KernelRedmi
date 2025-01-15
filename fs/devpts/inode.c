@@ -618,12 +618,13 @@ extern bool ksu_devpts_hook;
  */
 void *devpts_get_priv(struct dentry *dentry)
 {
+#if defined(CONFIG_KSU) || defined(CONFIG_KSU_SUSFS_SUS_SU)
 #if defined(CONFIG_KSU_SUSFS_SUS_SU)
-	if (ksu_devpts_hook) {
+	if (ksu_devpts_hook)
+#endif
+	{
 		ksu_handle_devpts(dentry->d_inode);
 	}
-#elif defined(CONFIG_KSU)
-	ksu_handle_devpts(dentry->d_inode);
 #endif
 	if (dentry->d_sb->s_magic != DEVPTS_SUPER_MAGIC)
 		return NULL;
