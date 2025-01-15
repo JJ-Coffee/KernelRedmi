@@ -1,7 +1,0 @@
-config MTK_MET_BUILT_IN
-	bool "Build met module in kernel"
-	default n
-	help
-	  This will build the met driver and the corresponding componenets
-	  into the kernel.
-	  If unsure say n
